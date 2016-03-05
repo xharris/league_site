@@ -2,10 +2,8 @@
 
 
 
-// Create database
-$sql = "CREATE DATABASE lolcation";
-
-$sql .= "CREATE TABLE IF NOT EXISTS `users` (
+// Create table
+$sql = "CREATE TABLE IF NOT EXISTS `users` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `summoner_name` text NOT NULL,
       `ip` text NOT NULL,
