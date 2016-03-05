@@ -3,6 +3,7 @@
 <html>
 
     <!-- CSS and SCRIPT includes -->
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="stylesheet" type="text/css" href="index.css">
     <script src="https://maps.googleapis.com/maps/api/js"></script>
@@ -18,12 +19,12 @@
         <tr>
             <td id="nav">
                 <div>
-                    <form action="new_user.php" method="post">
-                        Summoner Name: <input type="text" name="summoner_name">
+                    <form id="form_new_user">
+                        Summoner Name: <input type="text" name="summoner_name" id="summoner_name">
                         <br>
-                        Location: <input type="text" name="location">
+                        Location: <input type="text" name="location" id="location">
                         <br>
-                        <button type="submit">SUBMIT</button>
+                        <button id="summoner_submit">SUBMIT</button>
                     </form>
                 </div>
             </td>
@@ -34,9 +35,30 @@
     </table>
 
 <script>
-var mapCanvas = document.getElementById("map");
-var mapOptions = {center: new google.maps.LatLng(51.5, -0.2), zoom: 10};
-var map = new google.maps.Map(mapCanvas, mapOptions);
+    var mapCanvas, mapOptions, map;
+    $(function(){
+        mapCanvas = document.getElementById("map");
+        mapOptions = {center: new google.maps.LatLng(51.5, -0.2), zoom: 10};
+        map = new google.maps.Map(mapCanvas, mapOptions);
+    });
+
+    // prevent page reload
+    $("#new_user_form").submit(function(e){
+        e.preventDefault();
+    });
+
+    $("#summoner_submit").on( "click", function() {
+
+        $.post( "new_user.php",
+            {
+                summoner_name: $("#summoner_name").val(),
+                location: $("#location").val()
+            }
+        ).done(function( data ) {
+            console.log( "Data Loaded: " + data );
+        });
+    });
+
 </script>
 
 </html>
