@@ -1,4 +1,3 @@
-here it is
 <!DOCTYPE html>
 
 <html>
@@ -7,6 +6,8 @@ here it is
     <link rel="stylesheet" type="text/css" href="index.css">
     <script src="https://maps.googleapis.com/maps/api/js"></script>
 
+
+    <?php include("load.php"); ?>
 
     <table border="1" style="width:100%">
         <tr>
