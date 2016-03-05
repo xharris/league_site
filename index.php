@@ -34,7 +34,7 @@
                 </ul>
             </td>
             <td>
-                <div id="map" style="width:100%;height:400px">Map goes here</div>
+                <div id="map" style="width:100%;height:100%">Map goes here</div>
             </td>
         </tr>
     </table>
