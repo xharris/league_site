@@ -27,6 +27,11 @@
                         <button id="summoner_submit">SUBMIT</button>
                     </form>
                 </div>
+                <p>Location</p>
+                <ul class="breadcrumb">
+                <li>Home</li>
+                <li>Here</li>
+                </ul>
             </td>
             <td>
                 <div id="map" style="width:100%;height:400px">Map goes here</div>
@@ -38,7 +43,7 @@
     var mapCanvas, mapOptions, map;
     $(function(){
         mapCanvas = document.getElementById("map");
-        mapOptions = {center: new google.maps.LatLng(51.5, -0.2), zoom: 10};
+        mapOptions = {center: new google.maps.LatLng(38.8, -79.5), zoom: 4};
         map = new google.maps.Map(mapCanvas, mapOptions);
     });
 
@@ -58,7 +63,6 @@
             console.log( "Data Loaded: " + data );
         });
     });
-
 </script>
 
 </html>
