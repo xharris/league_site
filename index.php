@@ -10,11 +10,12 @@
     <?php include("load.php"); ?>
 
     <table border="1" style="width:100%">
+
         <tr>
-            <th colspan="2">Title</th>
+            <th colspan="2">LoL Location</th>
         </tr>
         <tr>
-            <td id="nav">Left bar</td>
+            <td id="nav"><p>Left bar</p></td>
             <td>
                 <div id="map">Map goes here</div>
             </td>
