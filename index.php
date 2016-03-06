@@ -87,8 +87,8 @@
 <?php
     $cities_str = '[';
 
-    foreach ($cities as $city) {
-        $cities_str .= '"'.$city.'",';
+    foreach ($cities as $c=>$city) {
+        $cities_str .= '["'.$city['name'].'","'.$city['population'].'"],';
     }
     $cities_str .= ']';
  ?>
@@ -135,13 +135,26 @@
           });
       }
 
+        cities = <?php echo $cities_str; ?>
+
+        var infowindow, marker;
+
+
+  var infowindow = new google.maps.InfoWindow();
+
+  var marker, i;
+
+  for (i = 0; i < cities.length; i++) {
+      addMarker(cities[i][0], cities[i][1], map)
+    }
+
       // Get the user's location
     if(navigator.geolocation) {
       browserSupportFlag = true;
       navigator.geolocation.getCurrentPosition(function(position) {
         initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
         map.setCenter(initialLocation);
-        map.setZoom(10);
+        map.setZoom(5);
 
         geocoder.geocode({'location': initialLocation}, function(results, status) {
             // suggest it to them (lol)
@@ -164,6 +177,29 @@
     }
 
     });
+
+    // Adds a marker to the map.
+    function addMarker(location, label, map) {
+      geocoder.geocode({'address': location}, function(results, status) {
+          var coords = {
+              lat:results[0].geometry.location.lat(),
+              lng:results[0].geometry.location.lng()
+          };
+
+          var marker = new google.maps.Marker({
+            position: coords,
+            label: label,
+            map: map,
+            infowindow: new google.maps.InfoWindow({
+                            content: location
+                        })
+          });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          this.infowindow.open(map, this);
+        });
+     });
+    }
 
     // prevent page reload
     $("#new_user_form").submit(function(e){
