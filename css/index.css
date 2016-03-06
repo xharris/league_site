@@ -36,10 +36,11 @@ th
 td
 {
     height: 100%;
+    vertical-align: top;
 }
-input
+input#autocomplete
 {
-
+    width: 90%;
 }
 #nav
 {
