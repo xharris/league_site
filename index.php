@@ -37,27 +37,27 @@
                         <td><a href="#">County</a></td>
                     </tr>
                     <tr>
-                        <td id="c">US</td>
-                        <td id="s">States</td>
-                        <td id="cy">County</td>
+                        <td class="c">US</td>
+                        <td class="s">States</td>
+                        <td class="cy">County</td>
                     </tr>
                     <tr>
-                        <td id="c">Canada</td>
+                        <td class="c">Canada</td>
                     </tr>
                     <tr>
-                        <td id="c">South America</td>
+                        <td class="c">South America</td>
                     </tr>
                     <tr>
-                        <td id="c">Europe</td>
+                        <td class="c">Europe</td>
                     </tr>
                     <tr>
-                        <td id="c">Africa</td>
+                        <td class="c">Africa</td>
                     </tr>
                     <tr>
-                        <td id="c">Asia</td>
+                        <td class="c">Asia</td>
                     </tr>
                     <tr>
-                        <td id="c">Australia</td>
+                        <td class="c">Australia</td>
                     </tr>
                 </table>
             </td>
@@ -110,6 +110,11 @@
         return false;
     });
 
+    $("Country").on("click", function())
+    {
+        $("s").toggleClass("hidden");
+        $("cy").toggleClass("hidden");
+    }
     // Get the user's location
   if(navigator.geolocation) {
     browserSupportFlag = true;
