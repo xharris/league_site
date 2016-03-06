@@ -81,8 +81,8 @@
 <?php
     $cities_str = '[';
 
-    foreach ($cities as $city) {
-        $cities_str .= '"'.$city.'",';
+    foreach ($cities as $c=>$city) {
+        $cities_str .= '["'.$city['name'].'","'.$city['population'].'"],';
     }
     $cities_str .= ']';
  ?>
@@ -97,36 +97,18 @@
         map = new google.maps.Map(mapCanvas);
         geocoder = new google.maps.Geocoder;
 
-        cities = <?php echo $cities_str; ?>;
+        cities = <?php echo $cities_str; ?>
+
+        var infowindow, marker;
 
 
-      // add marker for cities with players
-      for (city in cities) {
-        geocoder.geocode( { 'address': cities[city]}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                var infowindow = new google.maps.InfoWindow(
-                    { content: '<b>'+cities[city]+'</b>',
-                      size: new google.maps.Size(150,50)
-                    });
+  var infowindow = new google.maps.InfoWindow();
 
-                var marker = new google.maps.Marker({
-                    position: results[0].geometry.location,
-                    map: map,
-                    title:cities[city]
-                });
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map,marker);
-                });
+  var marker, i;
 
-              } else {
-                alert("No results found");
-              }
-            } else {
-              alert("Geocode was not successful for the following reason: " + status);
-            }
-          });
-      }
+  for (i = 0; i < cities.length; i++) {
+      addMarker(cities[i][0], cities[i][1], map)
+    }
 
       // Get the user's location
     if(navigator.geolocation) {
@@ -134,15 +116,12 @@
       navigator.geolocation.getCurrentPosition(function(position) {
         initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
         map.setCenter(initialLocation);
-        map.setZoom(10);
+        map.setZoom(5);
 
         geocoder.geocode({'location': initialLocation}, function(results, status) {
             // suggest it to them (lol)
             addr_suggest = results[2].formatted_address;
             $("#location").val(addr_suggest);
-
-            long = results[0].geometry.location.lng();
-            lat = results[0].geometry.location.lat();
         });
 
       }, function() {
@@ -156,6 +135,29 @@
     }
 
     });
+
+    // Adds a marker to the map.
+    function addMarker(location, label, map) {
+      geocoder.geocode({'address': location}, function(results, status) {
+          var coords = {
+              lat:results[0].geometry.location.lat(),
+              lng:results[0].geometry.location.lng()
+          };
+
+          var marker = new google.maps.Marker({
+            position: coords,
+            label: label,
+            map: map,
+            infowindow: new google.maps.InfoWindow({
+                            content: location
+                        })
+          });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          this.infowindow.open(map, this);
+        });
+     });
+    }
 
     // prevent page reload
     $("#new_user_form").submit(function(e){
