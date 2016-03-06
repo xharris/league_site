@@ -34,7 +34,7 @@
             <td id="nav">
                 <button id="btn_new_user" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Add me!</button>
 
-                <div class="container_new_user">
+                <div class="container_new_user hidden">
                     <form id="form_new_user">
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -51,7 +51,7 @@
                     </form>
                 </div>
 
-                <div class="container_user_list hidden">
+                <div class="container_user_list">
                     <p>Players</p>
                     <div class="user_list">
 
