@@ -123,6 +123,8 @@
       map.setCenter(initialLocation);
       map.setZoom(15);
 
+      console.log(initialLocation)
+
     }, function() {
       handleNoGeolocation(browserSupportFlag);
     });
