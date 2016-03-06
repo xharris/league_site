@@ -393,27 +393,34 @@
 
     // new user form submit
     $("#summoner_submit").on( "click", function() {
+        vals = {
+            summoner_name: $("#summoner_name").val(),
+            location: $("#location").val(),
+            longitude: long,
+            latitude: lat
+        };
+        getLevel(vals, function(user,user_level){
+            $.ajax({
+                type: 'post',
+                url: 'new_user.php',
+                data: {
+                    summoner_name: $("#summoner_name").val(),
+                    location: $("#location").val(),
+                    longitude: long,
+                    latitude: lat
+                },
+                success: function (response) {
+                    // set up
+                    if (response != '') {
+                        user_info = response;
 
-        $.ajax({
-            type: 'post',
-            url: 'new_user.php',
-            data: {
-                summoner_name: $("#summoner_name").val(),
-                location: $("#location").val(),
-                longitude: long,
-                latitude: lat
-            },
-            success: function (response) {
-                // set up
-                if (response != '') {
-                    user_info = response;
+                        $(".container_new_user").toggleClass("hidden");
 
-                    $(".container_new_user").toggleClass("hidden");
-
-                    refreshUserList();
-                    refreshMapMarkers();
+                        refreshUserList();
+                        refreshMapMarkers();
+                    }
                 }
-            }
+            });
         });
 
         return false;
