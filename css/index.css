@@ -17,12 +17,12 @@ form#form_new_user
 }
 html
 {
-    background-color: #c5cae9;
+    background-color: #e6ee9c;
 }
 table,tr, th, td
 {
     background-color: white;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
 }
 table#main
 {
@@ -57,9 +57,13 @@ input#autocomplete
 }
 td#nav
 {
+    padding:5px;
     width:20%;
     text-align: top;
     background-color: #f1f1c1;
+}
+#nav > #btn_new_user{
+    width:100%;
 }
 #map
 {
@@ -75,3 +79,9 @@ td#c, input#street_number, input#route, input#postal_code
 {
     display: none;
 }
+
+.field
+{
+    width: justify;
+}
+

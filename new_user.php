@@ -12,6 +12,8 @@
             $_POST['latitude']
         );
 
+        setcookie("user",$name);
+
         $cities = $DB->getCitiesJS();
 
         echo '["'.$_POST['summoner_name'].'","'.$_POST['location'].'"]';
