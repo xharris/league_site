@@ -1,0 +1,36 @@
+#nav > .container_new_user{
+    width: 75%;
+    position: fixed;
+    left: 50%;
+    margin-left: -37.5%;
+    top: 100px;
+    z-index: 20;
+    background-color: lightgoldenrodyellow;
+    padding: 20px;
+    border: 2px solid black;
+
+    transition: top ease-in-out 1s;
+}
+#nav > .container_new_user.hidden{
+    top:-895px;
+    display:block !important;
+}
+
+#nav > .container_user_list > p{
+    margin-top:20px;
+    font-weight:900;
+    font-size:14px;
+}
+#nav > .container_user_list{
+    margin-bottom:20px;
+}
+#nav > .container_user_list > .user_list{
+    line-height:28px;
+}
+
+#nav > .container_user_list > .user_list > div{
+    line-height: 28px;
+    background-color: #f9fbe7;
+    border:1px solid #e6ee9c;
+    padding:5px;
+}

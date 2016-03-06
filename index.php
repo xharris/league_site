@@ -5,15 +5,16 @@
     <!-- CSS and SCRIPT includes -->
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
+    <link rel="stylesheet" type="text/css" href="css/container.css">
+    <link rel="stylesheet" type="text/css" href="css/form_new_user.css">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.blue_grey-orange.min.css" />
     <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
 
-    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
+    <!--script src="https://maps.googleapis.com/maps/api/js?sensor=false&amplibraries=places&callback=initAutocomplete"
        async defer></script-->
 
 
@@ -31,20 +32,30 @@
         </tr>
         <tr>
             <td id="nav">
-                <button id="btn_new_user">Add me!</button>
+                <button id="btn_new_user" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Add me!</button>
 
-                <div class="container_new_user hidden">
+                <div class="container_new_user">
                     <form id="form_new_user">
-                        Summoner Name: <input type="text" name="summoner_name" id="summoner_name">
-                        <br>
-                        Location: <input type="text" name="location" id="location">
-                        <br>
-                        <button id="summoner_submit">SUBMIT</button>
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="summoner_name">
+                            <label class="mdl-textfield__label" for="summoner_name">Summoner Name</label>
+                        </div>
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="location">
+                            <label class="mdl-textfield__label" for="location">Location</label>
+                        </div>
+
+                        <button id="summoner_submit"  class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">SUBMIT</button>
                     </form>
                 </div>
 
-                <div class="container_user_list">
+                <div class="container_user_list hidden">
+                    <p>Players</p>
+                    <div class="user_list">
 
+                    </div>
                 </div>
     <div id="locationField"><input id="autocomplete" placeholder="Enter your address"
             onFocus="geolocate()" type="text"></input>
@@ -129,13 +140,30 @@
   refreshMapMarkers();
   refreshUserList();
 
+  var found = false;
+  for (var u in users) {
+      if (getCooke("users") && users[u].name == getCookie("users")) {
+          var user_loc = new google.maps.LatLng(users[u].latitude,users[u].longitude);
+          map.setCenter(user_loc);
+          map.setZoom(15);
+          found = true;
+      }
+  }
+
       // Get the user's location
     if(navigator.geolocation) {
       browserSupportFlag = true;
       navigator.geolocation.getCurrentPosition(function(position) {
         initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
         map.setCenter(initialLocation);
-        map.setZoom(5);
+        map.setZoom(4);
+
+        if (!found) {
+            geocoder.geocode({'address': "USA"}, function(results, status) {
+                initialLocation = new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng());
+                map.setCenter(initialLocation);
+            });
+        }
 
         geocoder.geocode({'location': initialLocation}, function(results, status) {
             // suggest it to them (lol)
@@ -157,7 +185,23 @@
       handleNoGeolocation(browserSupportFlag);
     }
 
+    var input = document.getElementById('location');
+
+    var ac = new google.maps.places.Autocomplete(input);
+    ac.bindTo('bounds', map);
+
     });
+
+    function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
 
     function refreshMapMarkers() {
         $.ajax({
@@ -187,11 +231,11 @@
                 if (response != '') {
                     users = JSON.parse(response);
 
-                    $(".container_user_list").empty();
+                    $(".container_user_list > .user_list").empty();
 
                     for(var u in users){
-                        $(".container_user_list").append("\
-                            "+users[u].summoner_name+"<br>\
+                        $(".container_user_list > .user_list").append("\
+                          <div>"+users[u].summoner_name+"</div>\
                         ");
                     }
                 }
@@ -258,6 +302,8 @@
 
                     $(".container_new_user").toggleClass("hidden");
 
+                    console.log(getCookie("user"));
+
                     refreshMapMarkers();
                     refreshUserList();
                 }
@@ -266,6 +312,8 @@
 
         return false;
     });
+
+
 
     $("#EnterCountry").keypress(function(event)
     {
