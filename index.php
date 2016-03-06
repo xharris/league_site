@@ -95,7 +95,7 @@
        autocomplete.addListener('place_changed', fillInAddress);
      }
 
-function fillInAddress() {
+     function fillInAddress() {
         // Get the place details from the autocomplete object.
         var place = autocomplete.getPlace();
 
@@ -271,6 +271,7 @@ function fillInAddress() {
                             is_me = '';
                             if (summ_name == getCookie("user")) {
                                 is_me = ' class="current_user" ';
+                                getStuff(summ_name, function(summ_name,user_level){})
                             }
 
                             $(".container_user_list > .user_list").append("\
@@ -317,6 +318,33 @@ function fillInAddress() {
     }
 
     function getLevel(username,callback){
+        call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + username + '?api_key='+API_KEY
+
+
+        $.ajax({
+            url: call,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+
+            },
+            success: function (json) {
+                var SUMMONER_NAME_NOSPACES = username.replace(" ", "");
+
+                SUMMONER_NAME_NOSPACES = SUMMONER_NAME_NOSPACES.toLowerCase().trim();
+
+                summonerLevel = json[SUMMONER_NAME_NOSPACES].summonerLevel;
+                summonerID = json[SUMMONER_NAME_NOSPACES].id;
+
+                callback(username,summonerLevel);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("error getting Summoner data!");
+            }
+        });
+    }
+
+    function getStuff(username,callback){
         call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + username + '?api_key='+API_KEY
 
 
