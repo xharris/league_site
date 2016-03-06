@@ -8,7 +8,7 @@
 
 .container_new_user
 {
-    background-color: rgba(189,189,189,0.7) !important;
+    background-color: rgba(189,189,189,0.85) !important;
 
 }
 form#form_new_user
@@ -85,4 +85,3 @@ td#c, input#street_number, input#route, input#postal_code
 {
     width: justify;
 }
-
