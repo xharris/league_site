@@ -10,9 +10,6 @@
 
     <?php
         require_once "load.php";
-
-        $cities = $DB->getCities();
-
     ?>
 
     <table border="1" style="width:100%" id="main">
@@ -78,26 +75,16 @@
         </tr>
     </table>
 
-<?php
-    $cities_str = '[';
-
-    foreach ($cities as $c=>$city) {
-        $cities_str .= '["'.$city['name'].'","'.$city['population'].'"],';
-    }
-    $cities_str .= ']';
- ?>
-
 <script>
     var mapCanvas, mapOptions, map, geocoder;
-    var user_name, addr_suggest, long, lat;
+    var user_info, addr_suggest, long, lat;
     var cities;
+    var markers = [];
 
     $(function(){
         mapCanvas = document.getElementById("map");
         map = new google.maps.Map(mapCanvas);
         geocoder = new google.maps.Geocoder;
-
-        cities = <?php echo $cities_str; ?>
 
         var infowindow, marker;
 
@@ -106,9 +93,7 @@
 
   var marker, i;
 
-  for (i = 0; i < cities.length; i++) {
-      addMarker(cities[i][0], cities[i][1], map)
-    }
+  refreshMapMarkers();
 
       // Get the user's location
     if(navigator.geolocation) {
@@ -136,6 +121,21 @@
 
     });
 
+    function refreshMapMarkers() {
+        cities = <?php echo $cities; ?>;
+
+        for(var m in markers){
+            markers[m].setMap(null);
+            markers[m].pop();
+        }
+
+        for (i = 0; i < cities.length; i++) {
+            addMarker(cities[i][0], cities[i][1], map)
+          }
+
+         console.log(markers)
+    }
+
     // Adds a marker to the map.
     function addMarker(location, label, map) {
       geocoder.geocode({'address': location}, function(results, status) {
@@ -144,7 +144,7 @@
               lng:results[0].geometry.location.lng()
           };
 
-          var marker = new google.maps.Marker({
+          marker = new google.maps.Marker({
             position: coords,
             label: label,
             map: map,
@@ -152,6 +152,8 @@
                             content: location
                         })
           });
+
+          markers.push(marker);
 
         google.maps.event.addListener(marker, 'click', function() {
           this.infowindow.open(map, this);
@@ -184,9 +186,11 @@
             success: function (response) {
                 // set up
                 if (response != '') {
-                    user_name = response;
+                    user_info = response;
 
                     $(".container_new_user").toggleClass("hidden");
+
+                    refreshMapMarkers();
                 }
             }
         });

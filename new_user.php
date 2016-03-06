@@ -12,7 +12,9 @@
             $_POST['latitude']
         );
 
-        echo $_POST['summoner_name'];
+        $cities = $DB->getCitiesJS();
+
+        echo '["'.$_POST['summoner_name'].'","'.$_POST['location'].'"]';
     }
 
  ?>
