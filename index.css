@@ -27,7 +27,7 @@ td
 #nav
 {
     width:20%;
-    text-align: top;
+    vertical-align: top;
     background-color: #f1f1c1;
 }
 #nav > .container_new_user.hidden{

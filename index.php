@@ -35,12 +35,7 @@
 
             </td>
             <td>
-                <div id="map" style="width:100%;height:100%">Map goes here</div>
-            </td>
-        </tr>
-        <tr id="footer">
-            <td colspan="2">
-                <p id="footer">site design / logo &#169; 2016, Made by Summoners like you Thank You.</p>
+                <div id="map" style="width:100%;height:400px">Map goes here</div>
             </td>
         </tr>
     </table>
@@ -58,6 +53,7 @@
         e.preventDefault();
     });
 
+    // a new user wants to join
     $("#summoner_submit").on( "click", function() {
 
         $.ajax({
@@ -68,7 +64,10 @@
                 location: $("#location").val()
             },
             success: function (response) {
+                // set up
                 user_name = response;
+                $(".container_user_list > .summoner_name").html(user_name);
+
                 $(".container_new_user").toggleClass("hidden");
                 $(".container_user_list").toggleClass("hidden");
             }
@@ -76,6 +75,35 @@
 
         return false;
     });
+
+    // Get the user's location
+  if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      map.setCenter(initialLocation);
+      map.setZoom(15);
+
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  }
+  // Browser doesn't support Geolocation
+  else {
+    browserSupportFlag = false;
+    handleNoGeolocation(browserSupportFlag);
+  }
+
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag == true) {
+      alert("Geolocation service failed.");
+      initialLocation = newyork;
+    } else {
+      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      initialLocation = siberia;
+    }
+    map.setCenter(initialLocation);
+  }
 </script>
 
 </html>
