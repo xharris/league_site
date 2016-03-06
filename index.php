@@ -162,9 +162,6 @@
 
         var infowindow, marker;
 
-
-  var infowindow = new google.maps.InfoWindow();
-
   var marker, i;
 
   refreshMapMarkers();
@@ -223,15 +220,15 @@
     });
 
     function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        }
+        return "";
     }
-    return "";
-}
 
     function refreshMapMarkers() {
         $.ajax({
@@ -306,12 +303,24 @@
               lng:results[0].geometry.location.lng()
           };
 
+          var info_text = location;
+          var user_string = '';
+          var user_count = 0;
+          for (var u in users) {
+              if (users[u].location == location) {
+                  user_count += 1;
+                  user_string += users[u].summoner_name+"<br>";
+              }
+          }
+          user_string = user_string.substring(0, user_string.length - 4);
+          info_text += "<br><b>"+user_count+" players</b><div style='max-height:80px;overflow:auto'>"+user_string+"</div>";
+
           marker = new google.maps.Marker({
             position: coords,
             label: label,
             map: map,
             infowindow: new google.maps.InfoWindow({
-                            content: location
+                            content: info_text
                         })
           });
 
@@ -367,7 +376,7 @@
                 //callback(username,summonerLevel);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("error getting Summoner data!");
+                //alert("error getting Summoner data!");
             }
         });
     }
@@ -401,8 +410,8 @@
 
                     $(".container_new_user").toggleClass("hidden");
 
-                    refreshMapMarkers();
                     refreshUserList();
+                    refreshMapMarkers();
                 }
             }
         });
