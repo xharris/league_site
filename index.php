@@ -18,7 +18,8 @@
         </tr>
         <tr>
             <td id="nav">
-                <div>
+
+                <div class="container_new_user">
                     <form id="form_new_user">
                         Summoner Name: <input type="text" name="summoner_name" id="summoner_name">
                         <br>
@@ -67,12 +68,18 @@
         <tr id="footer">
             <td colspan="2">
                 <p id="footer">site design / logo &#169; 2016, Made by Summoners like you Thank You.</p>
+                <div class="container_user_list hidden">
+                    <p class="summoner_name">Bob</p>
+                </div>
+            </td>
+            <td>
+                <div id="map" style="width:100%;height:100%">Map goes here</div>
             </td>
         </tr>
     </table>
 
 <script>
-    var mapCanvas, mapOptions, map;
+    var mapCanvas, mapOptions, map, user_name;
     $(function(){
         mapCanvas = document.getElementById("map");
         mapOptions = {center: new google.maps.LatLng(38.8, -79.5), zoom: 4};
@@ -84,17 +91,57 @@
         e.preventDefault();
     });
 
+    // a new user wants to join
     $("#summoner_submit").on( "click", function() {
 
-        $.post( "new_user.php",
-            {
+        $.ajax({
+            type: 'post',
+            url: 'new_user.php',
+            data: {
                 summoner_name: $("#summoner_name").val(),
                 location: $("#location").val()
+            },
+            success: function (response) {
+                // set up
+                user_name = response;
+                $(".container_user_list > .summoner_name").html(user_name);
+
+                $(".container_new_user").toggleClass("hidden");
+                $(".container_user_list").toggleClass("hidden");
             }
-        ).done(function( data ) {
-            console.log( "Data Loaded: " + data );
         });
+
+        return false;
     });
+
+    // Get the user's location
+  if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      map.setCenter(initialLocation);
+      map.setZoom(15);
+
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  }
+  // Browser doesn't support Geolocation
+  else {
+    browserSupportFlag = false;
+    handleNoGeolocation(browserSupportFlag);
+  }
+
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag == true) {
+      alert("Geolocation service failed.");
+      initialLocation = newyork;
+    } else {
+      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      initialLocation = siberia;
+    }
+    map.setCenter(initialLocation);
+  }
 </script>
 
 </html>
