@@ -43,7 +43,7 @@
                 <p>Location</p>
                 <table id="loc">
                     <tr>
-                        <td><a href="#">Country</a></td>
+                        <td><a href="#" id="c">Country</a></td>
                         <td><a href="#">State</a></td>
                         <td><a href="#">County</a></td>
                     </tr>
@@ -125,11 +125,18 @@
         return false;
     });
 
+    $("#c").on("click", function()
+    {
+        $(".s").toggleClass("hidden");
+        $(".cy").toggleClass("hidden");
+    });
+
     $("Country").on("click", function()
     {
         $("s").toggleClass("hidden");
         $("cy").toggleClass("hidden");
     });
+
     // Get the user's location
   if(navigator.geolocation) {
     browserSupportFlag = true;
