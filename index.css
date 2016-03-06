@@ -30,6 +30,12 @@ td
     text-align: top;
     background-color: #f1f1c1;
 }
+#footer
+{
+    margin: 0;
+    padding: 0 0 0 0;
+    font-size: 10px;
+}
 .breadcrumb
 {
     list-style: none;

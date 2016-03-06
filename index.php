@@ -37,6 +37,11 @@
                 <div id="map" style="width:100%;height:100%">Map goes here</div>
             </td>
         </tr>
+        <tr id="footer">
+            <td colspan="2">
+                <p id="footer">site design / logo &#169; 2016, Made by Summoners like you Thank You.</p>
+            </td>
+        </tr>
     </table>
 
 <script>
