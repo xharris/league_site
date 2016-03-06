@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.blue_grey-orange.min.css" />
     <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
 
-    <!--script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script-->
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
-       async defer></script>
+    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
+       async defer></script-->
 
     <!--script src="https://maps.googleapis.com/maps/api/js?sensor=false&amplibraries=places&callback=initAutocomplete"
        async defer></script-->
@@ -181,7 +181,6 @@
 
   refreshMapMarkers();
   refreshUserList();
-    doUserThings();
 
   var found = false;
   for (var u in users) {
@@ -297,12 +296,6 @@
         });
     }
 
-
-    function doUserThings(){
-                    for(var u in users){
-                        console.log(users[u]);
-                    }
-    }
 
     function calcDistance(aLat,aLng,bLat,bLng){
 
