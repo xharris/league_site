@@ -1,3 +1,12 @@
+//JS Commands
+.hidden{
+    display:none;
+}
+.expand {
+    colspan:2;
+}
+
+
 html
 {
     background-color: #c5cae9;
@@ -15,12 +24,6 @@ table#main
     border-collapse: collapse;
     width: 100%;
     height: 100%;
-}
-.hidden{
-    display:none;
-}
-.expand {
-    colspan:2;
 }
 table#loc
 {

@@ -51,21 +51,8 @@
                         <td><a href="#" id="state">State</a></td>
                         <td><a href="#" id="county">County</a></td>
                     </tr>
-                    <form id="EnterCountry">
-                    <tr><input type="text" list="CountryList"></tr>
-                    </form>
-<td class="country">
-
-                    <?php
-                        $states = ['ALABAMA','ALASKA','ARIZONA','ARKANSAS','CALIFORNIA','COLORADO','CONNECTICUT','DELAWARE','DISTRICT OF COLUMBIA','FEDERATED STATES OF MICRONESIA','FLORIDA','GEORGIA','HAWAII','IDAHO','ILLINOIS','INDIANA','IOWA','KANSAS','KENTUCKY','LOUISIANA','MAINE','MARYLAND','MASSACHUSETTS','MICHIGAN','MINNESOTA','MISSISSIPPI','MISSOURI','MONTANA','NEBRASKA','NEVADA','NEW HAMPSHIRE','NEW JERSEY','NEW MEXICO','NEW YORK','NORTH CAROLINA','NORTH DAKOTA','OHIO','OKLAHOMA','OREGON','PENNSYLVANIA','PUERTO RICO','RHODE ISLAND','SOUTH CAROLINA','SOUTH DAKOTA','TENNESSEE','TEXAS','UTAH','VERMONT','VIRGIN ISLANDS','VIRGINIA','WASHINGTON','WEST VIRGINIA','WISCONSIN','WYOMING',];
-                        $cc = count($states);
-                        for($i = 0 ; $i < $cc ; $i++){
-                            /*echo '<tr><td class="state" colspan="3"> array_values($states['.$i.'])</td></tr>';*/
-                            echo '<tr><td class="state" colspan="3">'.$states[$i].'</td></tr>';
-                        }
-                        
-                        ?>
-
+                    <tr><td><input type="text" list="CountryList" id="EnterCountry"></td></tr>
+                    <tr><td><input type="text" list="StateList" id="EnterState"></td></tr>
                     <tr><td class="county" colspan="3">County</td></tr>
 
                 </table>
@@ -125,14 +112,15 @@
         return false;
     });
 
-    $("#Countrylist").keypress(function(event)
+    $("#EnterCountry").keypress(function(event)
     {
-        var keycode = (event.keyCode ? event.keyCode : event.which);
-        if(keycode == '13'){
+        if(event.which == 13){
+            if(event.target.value == "United States"){
+            console.log(event);
             $(".state").hide();
             $(".county").hide();
             $(".country").show();
-        }
+        }}
     });
 
     $("#USA").on("click", function()
@@ -191,5 +179,23 @@
 <datalist id="CountryList">
     <option value="United States"><option value="Canada"><option value="South America"><option value="Europe">
     <option value="Africa"><<option value="Asia"><option value="Australia"></datalist>
+
+<datalist id="StateList">
+    <option value="Alabama"><option value="Alaska"><option value="Arizona"><option value="arkansas">
+    <option value="california"><option value="colorado"><option value="connecticut">
+    <option value="delaware"><option value="district Of Columbia">
+    <option value="federated States Of Micronesia"><option value="florida"><option value="georgia">
+    <option value="hawaii"><option value="idaho"><option value="illinois"><option value="indiana">
+    <option value="iowa"><option value="kansas"><option value="kentucky"><option value="louisiana">
+    <option value="maine"><option value="maryland"><option value="massachusetts"><option value="michigan">
+    <option value="minnesota"><option value="mississippi"><option value="missouri"><option value="montana">
+    <option value="nebraska"><option value="nevada"><option value="new Hampshire"><option value="new Jersey">
+    <option value="new Mexico"><option value="new York"><option value="north Carolina">
+    <option value="north Dakota"><option value="ohio"><option value="oklahoma"><option value="oregon">
+    <option value="pennsylvania"><option value="puerto Rico<option value="rhode Island">
+    <option value="south Carolina"><option value="south Dakota"><option value="tennessee">
+    <option value="texas"><option value="utah"><option value="vermont"><option value="virgin Islands">
+    <option value="virginia"><option value="washington"><option value="west Virginia">
+    <option value="wisconsin"><option value="wyoming"><\datalist>
 
 </html>
