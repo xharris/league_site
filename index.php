@@ -7,16 +7,14 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
 
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
-=======
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
-       async defer></script>
->>>>>>> b72e109c15d20afc507825f488387b1a07ea2476
+
+    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
+       async defer></script-->
 
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -51,7 +49,7 @@
     <div id="locationField"><input id="autocomplete" placeholder="Enter your address"
             onFocus="geolocate()" type="text"></input>
    </div>
-   
+
     <!-- Documentation: url="https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform" -->
    <script>
 
@@ -192,7 +190,6 @@
                     $(".container_user_list").empty();
 
                     for(var u in users){
-                        console.log(users[u]);
                         $(".container_user_list").append("\
                             "+users[u].summoner_name+"<br>\
                         ");
