@@ -6,7 +6,12 @@
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
 
     <?php
         require_once "load.php";
@@ -53,12 +58,13 @@
                         <td><a href="#" id="state">State</a></td>
                         <td><a href="#" id="county">County</a></td>
                     </tr>
-                    <tr><td><input type="text" list="CountryList" id="EnterCountry"></td></tr>
-                    <tr><td><input type="text" list="StateList" id="EnterState"></td></tr>
-                    <form id="EnterCountry">
-                    <tr><input type="text" list="CountryList"></tr>
-                    </form>
-<td class="country">
+                    <tr><td><div id="locationField">
+                        <input id="autocomplete" placeholder="Enter Address Here" onfocus="geolocate()" type="text"></input>
+                    </div></td></tr>
+
+                    <tr><td><input type="text" list="CountryList" id="EnterCountry"></input></td></tr>
+                    <tr><td><input type="text" list="StateList" id="EnterState"></input></td></tr>
+                    <td class="country">
 
                     <tr><td class="county" colspan="3">County</td></tr>
 
@@ -107,6 +113,10 @@
             // suggest it to them (lol)
             addr_suggest = results[2].formatted_address;
             $("#location").val(addr_suggest);
+
+            long = results[0].geometry.location.lng();
+            lat = results[0].geometry.location.lat();
+
         });
 
       }, function() {
@@ -198,12 +208,71 @@
         return false;
     });
 
+    /** Documentation: url="https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform" **/
+
+var placeSearch, autocomplete;
+var componentForm = {
+  street_number: 'short_name',
+  route: 'long_name',
+  locality: 'long_name',
+  administrative_area_level_1: 'short_name',
+  country: 'long_name',
+  postal_code: 'short_name'
+};
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+      {types: ['geocode']});
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+
+  for (var component in componentForm) {
+    document.getElementById(component).value = '';
+    document.getElementById(component).disabled = false;
+  }
+  // Get each component of the address from the place details
+  // and fill the corresponding field on the form.
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (componentForm[addressType]) {
+      var val = place.address_components[i][componentForm[addressType]];
+      document.getElementById(addressType).value = val;
+    }
+  }
+}
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocate() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle({
+        center: geolocation,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}
+
+
     $("#EnterCountry").keypress(function(event)
     {
         if(event.which == 13){
             if(event.target.value == "United States"){
             console.log(event);
-            $(".state").hide();
+            $("#EnterState").show();
             $(".county").hide();
             $(".country").show();
         }}
@@ -238,25 +307,25 @@
 </script>
 
 <datalist id="CountryList">
-    <option value="United States"><option value="Canada"><option value="South America"><option value="Europe">
+    <option value="USA"><option value="Canada"><option value="South America"><option value="Europe">
     <option value="Africa"><<option value="Asia"><option value="Australia"></datalist>
 
 <datalist id="StateList">
-    <option value="Alabama"><option value="Alaska"><option value="Arizona"><option value="arkansas">
-    <option value="california"><option value="colorado"><option value="connecticut">
-    <option value="delaware"><option value="district Of Columbia">
-    <option value="federated States Of Micronesia"><option value="florida"><option value="georgia">
-    <option value="hawaii"><option value="idaho"><option value="illinois"><option value="indiana">
-    <option value="iowa"><option value="kansas"><option value="kentucky"><option value="louisiana">
-    <option value="maine"><option value="maryland"><option value="massachusetts"><option value="michigan">
-    <option value="minnesota"><option value="mississippi"><option value="missouri"><option value="montana">
-    <option value="nebraska"><option value="nevada"><option value="new Hampshire"><option value="new Jersey">
-    <option value="new Mexico"><option value="new York"><option value="north Carolina">
-    <option value="north Dakota"><option value="ohio"><option value="oklahoma"><option value="oregon">
-    <option value="pennsylvania"><option value="puerto Rico<option value="rhode Island">
-    <option value="south Carolina"><option value="south Dakota"><option value="tennessee">
-    <option value="texas"><option value="utah"><option value="vermont"><option value="virgin Islands">
-    <option value="virginia"><option value="washington"><option value="west Virginia">
-    <option value="wisconsin"><option value="wyoming"><\datalist>
+    <option value="Alabama"><option value="Alaska"><option value="Arizona"><option value="Arkansas">
+    <option value="California"><option value="Colorado"><option value="Connecticut">
+    <option value="Delaware"><option value="District Of Columbia">
+    <option value="Federated States Of Micronesia"><option value="Florida"><option value="Georgia">
+    <option value="Hawaii"><option value="Idaho"><option value="Illinois"><option value="Indiana">
+    <option value="Iowa"><option value="Kansas"><option value="Kentucky"><option value="Louisiana">
+    <option value="Maine"><option value="Maryland"><option value="Massachusetts"><option value="Michigan">
+    <option value="Minnesota"><option value="Mississippi"><option value="Missouri"><option value="Montana">
+    <option value="Nebraska"><option value="Nevada"><option value="New Hampshire"><option value="New Jersey">
+    <option value="New Mexico"><option value="New York"><option value="North Carolina">
+    <option value="North Dakota"><option value="Ohio"><option value="Oklahoma"><option value="Oregon">
+    <option value="Pennsylvania"><option value="Puerto Rico"><option value="Rhode Island">
+    <option value="South Carolina"><option value="South Dakota"><option value="Tennessee">
+    <option value="Texas"><option value="Utah"><option value="Vermont"><option value="Virgin Islands">
+    <option value="Virginia"><option value="Washington"><option value="West Virginia">
+    <option value="Wisconsin"><option value="Wyoming"><\datalist>
 
 </html>
