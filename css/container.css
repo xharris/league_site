@@ -34,8 +34,16 @@
 }
 
 #nav > .container_user_list > .user_list > div{
+    position:relative;
     line-height: 28px;
     background-color: #f9fbe7;
     border:1px solid #e6ee9c;
     padding:5px;
+}
+#nav > .container_user_list > .user_list > div > a{
+    position: absolute;
+    right: 8px;
+    font-size: 23px;
+    cursor: pointer;
+    top: 8px;
 }

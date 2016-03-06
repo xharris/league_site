@@ -14,14 +14,7 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
-
-    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
-       async defer></script-->
-
-    <!--script src="https://maps.googleapis.com/maps/api/js?sensor=false&amplibraries=places&callback=initAutocomplete"
-       async defer></script-->
-
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
@@ -260,6 +253,8 @@
         });
     }
 
+
+
     function refreshUserList() {
         $.ajax({
             url:"php/getUsers.php",
@@ -271,21 +266,20 @@
                     $(".container_user_list > .user_list").empty();
 
                     for(var u in users){
-                        console.log(users[u])
-                        getLevel(users[u].summoner_name, function(summ_name,user_level){
+                        getLevel(users[u], function(user,user_level){
 
                             is_me = '';
-                            if (summ_name == getCookie("user")) {
+                            if (user.summoner_name == getCookie("user")) {
                                 is_me = ' class="current_user" ';
-                                getStuff(summ_name, function(summ_name,user_level){})
                             }
 
                             $(".container_user_list > .user_list").append("\
-                              <div"+is_me+">"+summ_name+" ("+user_level+")</div>\
+                              <div"+is_me+">"+user.summoner_name+" ("+user_level+")<a href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
                             ");
                         });
 
                     }
+                    //getStuff("Toaxt", function(summ_name,user_level){})
                 }
             }
         });
@@ -296,7 +290,12 @@
 
     }
 
-    function moveMap() {}
+    function moveMap(address) {
+        geocoder.geocode({'address': address}, function(results, status) {
+            initialLocation = new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng());
+            map.setCenter(initialLocation);
+        });
+    }
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
@@ -324,8 +323,8 @@
      });
     }
 
-    function getLevel(username,callback){
-        call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + username + '?api_key='+API_KEY
+    function getLevel(user,callback){
+        call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + user.summoner_name + '?api_key='+API_KEY
 
 
         $.ajax({
@@ -336,14 +335,14 @@
 
             },
             success: function (json) {
-                var SUMMONER_NAME_NOSPACES = username.replace(" ", "");
+                var SUMMONER_NAME_NOSPACES = user.summoner_name.replace(" ", "");
 
                 SUMMONER_NAME_NOSPACES = SUMMONER_NAME_NOSPACES.toLowerCase().trim();
 
                 summonerLevel = json[SUMMONER_NAME_NOSPACES].summonerLevel;
                 summonerID = json[SUMMONER_NAME_NOSPACES].id;
 
-                callback(username,summonerLevel);
+                callback(user,summonerLevel);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("error getting Summoner data!");
@@ -352,7 +351,7 @@
     }
 
     function getStuff(username,callback){
-        call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + username + '?api_key='+API_KEY
+        call = 'https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/' + username + '/ranked?api_key='+API_KEY
 
 
         $.ajax({
@@ -363,14 +362,9 @@
 
             },
             success: function (json) {
-                var SUMMONER_NAME_NOSPACES = username.replace(" ", "");
+                console.log(json);
 
-                SUMMONER_NAME_NOSPACES = SUMMONER_NAME_NOSPACES.toLowerCase().trim();
-
-                summonerLevel = json[SUMMONER_NAME_NOSPACES].summonerLevel;
-                summonerID = json[SUMMONER_NAME_NOSPACES].id;
-
-                callback(username,summonerLevel);
+                //callback(username,summonerLevel);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("error getting Summoner data!");
@@ -407,8 +401,6 @@
 
                     $(".container_new_user").toggleClass("hidden");
 
-                    console.log(getCookie("user"));
-
                     refreshMapMarkers();
                     refreshUserList();
                 }
@@ -424,7 +416,6 @@
     {
         if(event.which == 13){
             if(event.target.value == "United States"){
-            console.log(event);
             $("#EnterState").show();
             $(".county").hide();
             $(".country").show();
