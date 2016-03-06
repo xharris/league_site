@@ -12,10 +12,15 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.blue_grey-orange.min.css" />
     <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
 
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+    <!--script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script-->
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
+       async defer></script>
 
     <!--script src="https://maps.googleapis.com/maps/api/js?sensor=false&amplibraries=places&callback=initAutocomplete"
        async defer></script-->
+
 
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -67,7 +72,13 @@
 <input class="field" id="administrative_area_level_1" disabled="true" readonly></input>
 <input class="field" id="locality" disabled="true" readonly></input>
 
-   </div>
+    <table id="SummonerFinder">
+        <tr><th>Summoners</th></tr>
+        <tr><td>Hi</td></tr>
+        <tr><td>Yo</td></tr>
+    </table>
+</div>
+
 
 
     <!-- Documentation: url="https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform" -->
@@ -132,7 +143,7 @@
          });
        }
      }
-   </script>
+    </script>
 
 
             <div id="loc"></div>
@@ -170,6 +181,7 @@
 
   refreshMapMarkers();
   refreshUserList();
+    doUserThings();
 
   var found = false;
   for (var u in users) {
@@ -283,6 +295,13 @@
                 }
             }
         });
+    }
+
+
+    function doUserThings(){
+                    for(var u in users){
+                        console.log(users[u]);
+                    }
     }
 
     function calcDistance(aLat,aLng,bLat,bLng){
@@ -411,6 +430,8 @@
         return false;
     });
 
+<<<<<<< HEAD
+=======
 
 
     $("#EnterCountry").keypress(function(event)
@@ -440,6 +461,7 @@
 
 
 
+>>>>>>> origin/master
   function handleNoGeolocation(errorFlag) {
     if (errorFlag == true) {
       alert("Geolocation service failed.");
@@ -451,27 +473,5 @@
     map.setCenter(initialLocation);
   }
 </script>
-
-<datalist id="CountryList">
-    <option value="USA"><option value="Canada"><option value="South America"><option value="Europe">
-    <option value="Africa"><<option value="Asia"><option value="Australia"></datalist>
-
-<datalist id="StateList">
-    <option value="Alabama"><option value="Alaska"><option value="Arizona"><option value="Arkansas">
-    <option value="California"><option value="Colorado"><option value="Connecticut">
-    <option value="Delaware"><option value="District Of Columbia">
-    <option value="Federated States Of Micronesia"><option value="Florida"><option value="Georgia">
-    <option value="Hawaii"><option value="Idaho"><option value="Illinois"><option value="Indiana">
-    <option value="Iowa"><option value="Kansas"><option value="Kentucky"><option value="Louisiana">
-    <option value="Maine"><option value="Maryland"><option value="Massachusetts"><option value="Michigan">
-    <option value="Minnesota"><option value="Mississippi"><option value="Missouri"><option value="Montana">
-    <option value="Nebraska"><option value="Nevada"><option value="New Hampshire"><option value="New Jersey">
-    <option value="New Mexico"><option value="New York"><option value="North Carolina">
-    <option value="North Dakota"><option value="Ohio"><option value="Oklahoma"><option value="Oregon">
-    <option value="Pennsylvania"><option value="Puerto Rico"><option value="Rhode Island">
-    <option value="South Carolina"><option value="South Dakota"><option value="Tennessee">
-    <option value="Texas"><option value="Utah"><option value="Vermont"><option value="Virgin Islands">
-    <option value="Virginia"><option value="Washington"><option value="West Virginia">
-    <option value="Wisconsin"><option value="Wyoming"><\datalist>
 
 </html>
