@@ -69,11 +69,7 @@
             <td colspan="2">
                 <p id="footer">site design / logo &#169; 2016, Made by Summoners like you Thank You.</p>
                 <div class="container_user_list hidden">
-                    <p class="summoner_name">Bob</p>
                 </div>
-            </td>
-            <td>
-                <div id="map" style="width:100%;height:100%">Map goes here</div>
             </td>
         </tr>
     </table>
