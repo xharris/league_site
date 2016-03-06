@@ -116,7 +116,6 @@
         $(".cy").toggleClass("hidden");
     });
 
-=======
     $("Country").on("click", function()
     {
         $("s").toggleClass("hidden");
