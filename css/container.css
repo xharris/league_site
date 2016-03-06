@@ -42,6 +42,13 @@
     border:1px solid #e6ee9c;
     padding:5px;
 }
+#nav > .container_user_list > .user_list > div:hover{
+    position:relative;
+    line-height: 28px;
+    background-color: #e6ee9c;
+    border:1px solid #e6ee9c;
+    padding:5px;
+}
 #nav > .container_user_list > .user_list > div > a{
     position: absolute;
     right: 8px;
