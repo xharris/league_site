@@ -72,11 +72,6 @@
 <input class="field" id="administrative_area_level_1" disabled="true" readonly></input>
 <input class="field" id="locality" disabled="true" readonly></input>
 
-    <table id="SummonerFinder">
-        <tr><th>Summoners</th></tr>
-        <tr><td>Summoner 1</td></tr>
-        <tr><td>Summoner 2</td></tr>
-    </table>
 </div>
 
 
