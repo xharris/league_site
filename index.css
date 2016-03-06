@@ -28,6 +28,12 @@ td
     text-align: top;
     background-color: #f1f1c1;
 }
+#nav > .container_new_user.hidden{
+    display:none;
+}
+#nav > .container_user_list.hidden{
+    display:none;
+}
 .breadcrumb
 {
     list-style: none;
@@ -56,5 +62,5 @@ td
     top: 50%;
     margin-top: -50px;
     left: 100%;
-    z-index: 2; 
+    z-index: 2;
 }

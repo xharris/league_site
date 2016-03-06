@@ -18,7 +18,8 @@
         </tr>
         <tr>
             <td id="nav">
-                <div>
+
+                <div class="container_new_user">
                     <form id="form_new_user">
                         Summoner Name: <input type="text" name="summoner_name" id="summoner_name">
                         <br>
@@ -27,11 +28,11 @@
                         <button id="summoner_submit">SUBMIT</button>
                     </form>
                 </div>
-                <p>Location</p>
-                <ul class="breadcrumb">
-                <li>Home</li>
-                <li>Here</li>
-                </ul>
+
+                <div class="container_user_list hidden">
+                    <p class="summoner_name">Bob</p>
+                </div>
+
             </td>
             <td>
                 <div id="map" style="width:100%;height:400px">Map goes here</div>
@@ -40,7 +41,7 @@
     </table>
 
 <script>
-    var mapCanvas, mapOptions, map;
+    var mapCanvas, mapOptions, map, user_name;
     $(function(){
         mapCanvas = document.getElementById("map");
         mapOptions = {center: new google.maps.LatLng(38.8, -79.5), zoom: 4};
@@ -54,14 +55,21 @@
 
     $("#summoner_submit").on( "click", function() {
 
-        $.post( "new_user.php",
-            {
+        $.ajax({
+            type: 'post',
+            url: 'new_user.php',
+            data: {
                 summoner_name: $("#summoner_name").val(),
                 location: $("#location").val()
+            },
+            success: function (response) {
+                user_name = response;
+                $(".container_new_user").toggleClass("hidden");
+                $(".container_user_list").toggleClass("hidden");
             }
-        ).done(function( data ) {
-            console.log( "Data Loaded: " + data );
         });
+
+        return false;
     });
 </script>
 
