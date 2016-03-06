@@ -26,7 +26,7 @@
     <table border="1" style="width:100%" id="main">
 
         <tr>
-            <th colspan="2">LoLcator</th>
+            <th colspan="2"> <img src="https://tf68tq.bn1301.livefilestore.com/y3mG6P5biZtirvJFsQbce4ocD1pBTrlMtxbX3rCHCQVU8-vJ5o4OGVynw_pBe1qQrV_3NEwse1Icki5Q1YwGVCK-oeHj3HXhR-tYWgBqQyUjIvuDfH_cwOniPancIrHd5Xbi2hOvpsmBBrJPstFuvAN8MfikByz00nxQf0_FfpdruE?" width="45%" height="170%"/></th>
         </tr>
         <tr>
             <td id="nav">
