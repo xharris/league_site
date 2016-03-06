@@ -116,6 +116,13 @@
         $(".cy").toggleClass("hidden");
     });
 
+=======
+    $("Country").on("click", function()
+    {
+        $("s").toggleClass("hidden");
+        $("cy").toggleClass("hidden");
+    });
+
     // Get the user's location
   if(navigator.geolocation) {
     browserSupportFlag = true;
@@ -123,6 +130,8 @@
       initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       map.setCenter(initialLocation);
       map.setZoom(15);
+
+      console.log(initialLocation)
 
     }, function() {
       handleNoGeolocation(browserSupportFlag);
