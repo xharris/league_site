@@ -430,8 +430,6 @@
         return false;
     });
 
-<<<<<<< HEAD
-=======
 
 
     $("#EnterCountry").keypress(function(event)
@@ -459,9 +457,6 @@
         $(".county").show();
     });
 
-
-
->>>>>>> origin/master
   function handleNoGeolocation(errorFlag) {
     if (errorFlag == true) {
       alert("Geolocation service failed.");
