@@ -57,9 +57,18 @@
 
                     </div>
                 </div>
-    <div id="locationField"><input id="autocomplete" placeholder="Enter your address"
-            onFocus="geolocate()" type="text"></input>
+    <div id="locationField"><input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text"></input></div>
+<!-- NOT USED -->
+<input class="field" id="street_number" disabled="true"></input>
+<input class="field" id="route" disabled="true"></input>
+<input class="field" id="postal_code" disabled="true"></input>
+<!-- -->
+<input class="field" id="country" disabled="true" readonly></input>
+<input class="field" id="administrative_area_level_1" disabled="true" readonly></input>
+<input class="field" id="locality" disabled="true" readonly></input>
+
    </div>
+
 
     <!-- Documentation: url="https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform" -->
    <script>
@@ -86,6 +95,26 @@
        autocomplete.addListener('place_changed', fillInAddress);
      }
 
+function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        for (var component in componentForm) {
+          document.getElementById(component).value = '';
+          document.getElementById(component).disabled = false;
+        }
+
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (componentForm[addressType]) {
+            var val = place.address_components[i][componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+          }
+        }
+      }
+
      // Bias the autocomplete object to the user's geographical location,
      // as supplied by the browser's 'navigator.geolocation' object.
      function geolocate() {
@@ -109,7 +138,7 @@
             <div id="loc"></div>
             </td>
             <td id = "map">
-                <div id="map" style="width:100%;height:100%">Map goes here</div>
+                <div id="map" style="width:100%;height:100%">Please Reload Page, as there was an error loading the first time.</div>
             </td>
         </tr>
         <tr id="footer">

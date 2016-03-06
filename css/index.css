@@ -62,7 +62,11 @@ input#autocomplete
     padding: 0 0 0 0;
     font-size: 10px;
 }
-td#c
+td#c, input#street_number, input#route, input#postal_code
 {
     display: none;
+}
+.field
+{
+    width: justify;
 }
