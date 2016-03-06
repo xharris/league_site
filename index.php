@@ -33,8 +33,13 @@
                 <div class="container_user_list">
                     <?php
 
-                    $users = $DB->getUserLocations();
-                    var_dump($users);
+                    $user_list = $DB->getUserLocations();
+
+                    if (sizeof($user_list)) {
+                        foreach ($user_list as $u => $user) {
+                            echo $user['summoner_name'].'<br>';
+                        }
+                    }
 
                      ?>
                 </div>
@@ -85,7 +90,7 @@
 
 <script>
     var mapCanvas, mapOptions, map, geocoder;
-    var user_name, addr_suggest;
+    var user_name, addr_suggest, long, lat;
 
     $(function(){
         mapCanvas = document.getElementById("map");
@@ -112,7 +117,9 @@
             url: 'new_user.php',
             data: {
                 summoner_name: $("#summoner_name").val(),
-                location: $("#location").val()
+                location: $("#location").val(),
+                longitude: long,
+                latitude: lat
             },
             success: function (response) {
                 // set up
@@ -149,6 +156,9 @@
           // suggest it to them (lol)
           addr_suggest = results[2].formatted_address;
           $("#location").val(addr_suggest);
+
+          long = results[0].geometry.location.lng();
+          lat = results[0].geometry.location.lat();
       });
 
     }, function() {
