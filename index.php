@@ -7,8 +7,14 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
-       async defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+
+    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-Cg6p9pV6LdgjuQDWJ3iSULR_rq6XC_I&libraries=places&callback=initAutocomplete"
+       async defer></script-->
 
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -38,20 +44,9 @@
                 </div>
 
                 <div class="container_user_list">
-                    <?php
 
-                    $user_list = $DB->getUserLocations();
-
-                    if (sizeof($user_list)) {
-                        foreach ($user_list as $u => $user) {
-                            echo $user['summoner_name'].'<br>';
-                        }
-                    }
-
-                     ?>
                 </div>
-    <div id="locationField"><input id="autocomplete" placeholder="Enter your address"
-            onFocus="geolocate()" type="text"></input></div>
+    <div id="locationField"><input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text"></input></div>
 <!-- NOT USED -->
 <input class="field" id="street_number" disabled="true"></input>
 <input class="field" id="route" disabled="true"></input>
@@ -60,6 +55,8 @@
 <input class="field" id="country" disabled="true" readonly></input>
 <input class="field" id="administrative_area_level_1" disabled="true" readonly></input>
 <input class="field" id="locality" disabled="true" readonly></input>
+
+   </div>
 
 
     <!-- Documentation: url="https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform" -->
@@ -143,7 +140,7 @@ function fillInAddress() {
 <script>
     var mapCanvas, mapOptions, map, geocoder;
     var user_info, addr_suggest, long, lat;
-    var cities;
+    var cities, users;
     var markers = [];
 
     $(function(){
@@ -159,6 +156,7 @@ function fillInAddress() {
   var marker, i;
 
   refreshMapMarkers();
+  refreshUserList();
 
       // Get the user's location
     if(navigator.geolocation) {
@@ -191,23 +189,53 @@ function fillInAddress() {
     });
 
     function refreshMapMarkers() {
-        cities = <?php echo $cities; ?>;
+        $.ajax({
+            url:"php/getCities.php",
+            success: function (response) {
+                // set up
+                if (response != '') {
+                    cities = JSON.parse(response);
 
-        for(var m in markers){
-            markers[m].setMap(null);
-            markers[m].pop();
-        }
+                    for(var m in markers){
+                        markers[m].setMap(null);
+                    }
 
-        for (i = 0; i < cities.length; i++) {
-            addMarker(cities[i][0], cities[i][1], map)
-          }
+                    for (i = 0; i < cities.length; i++) {
+                        addMarker(cities[i].name, cities[i].population, map)
+                    }
+                }
+            }
+        });
+    }
 
-         console.log(markers)
+    function refreshUserList() {
+        $.ajax({
+            url:"php/getUsers.php",
+            success: function (response) {
+                // set up
+                if (response != '') {
+                    users = JSON.parse(response);
+
+                    $(".container_user_list").empty();
+
+                    for(var u in users){
+                        $(".container_user_list").append("\
+                            "+users[u].summoner_name+"<br>\
+                        ");
+                    }
+                }
+            }
+        });
+    }
+
+    function calcDistance(aLat,aLng,bLat,bLng){
+
     }
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
       geocoder.geocode({'address': location}, function(results, status) {
+
           var coords = {
               lat:results[0].geometry.location.lat(),
               lng:results[0].geometry.location.lng()
@@ -260,6 +288,7 @@ function fillInAddress() {
                     $(".container_new_user").toggleClass("hidden");
 
                     refreshMapMarkers();
+                    refreshUserList();
                 }
             }
         });
