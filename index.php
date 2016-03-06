@@ -28,7 +28,7 @@
     <table border="1" style="width:100%" id="main">
 
         <tr>
-            <th colspan="2">LoL Location</th>
+            <th colspan="2">LoLcator</th>
         </tr>
         <tr>
             <td id="nav">
@@ -154,6 +154,8 @@ function fillInAddress() {
     var cities, users;
     var markers = [];
 
+    var API_KEY = '800eb4db-8f56-48ee-8f7f-aefefeca5769';
+
     $(function(){
         mapCanvas = document.getElementById("map");
         map = new google.maps.Map(mapCanvas);
@@ -263,9 +265,19 @@ function fillInAddress() {
                     $(".container_user_list > .user_list").empty();
 
                     for(var u in users){
-                        $(".container_user_list > .user_list").append("\
-                          <div>"+users[u].summoner_name+"</div>\
-                        ");
+                        console.log(users[u])
+                        getLevel(users[u].summoner_name, function(summ_name,user_level){
+
+                            is_me = '';
+                            if (summ_name == getCookie("user")) {
+                                is_me = ' class="current_user" ';
+                            }
+
+                            $(".container_user_list > .user_list").append("\
+                              <div"+is_me+">"+summ_name+" ("+user_level+")</div>\
+                            ");
+                        });
+
                     }
                 }
             }
@@ -275,6 +287,8 @@ function fillInAddress() {
     function calcDistance(aLat,aLng,bLat,bLng){
 
     }
+
+    function moveMap() {}
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
@@ -300,6 +314,33 @@ function fillInAddress() {
           this.infowindow.open(map, this);
         });
      });
+    }
+
+    function getLevel(username,callback){
+        call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + username + '?api_key='+API_KEY
+
+
+        $.ajax({
+            url: call,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+
+            },
+            success: function (json) {
+                var SUMMONER_NAME_NOSPACES = username.replace(" ", "");
+
+                SUMMONER_NAME_NOSPACES = SUMMONER_NAME_NOSPACES.toLowerCase().trim();
+
+                summonerLevel = json[SUMMONER_NAME_NOSPACES].summonerLevel;
+                summonerID = json[SUMMONER_NAME_NOSPACES].id;
+
+                callback(username,summonerLevel);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("error getting Summoner data!");
+            }
+        });
     }
 
     // prevent page reload

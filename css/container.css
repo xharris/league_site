@@ -18,6 +18,7 @@
 
 #nav > .container_user_list > p{
     margin-top:20px;
+    margin-bottom:0px;
     font-weight:900;
     font-size:14px;
 }
@@ -26,6 +27,9 @@
 }
 #nav > .container_user_list > .user_list{
     line-height:28px;
+}
+#nav > .container_user_list > .user_list > .current_user{
+    font-weight:700;
 }
 
 #nav > .container_user_list > .user_list > div{
