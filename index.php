@@ -74,8 +74,8 @@
 
     <table id="SummonerFinder">
         <tr><th>Summoners</th></tr>
-        <tr><td>Hi</td></tr>
-        <tr><td>Yo</td></tr>
+        <tr><td>Summoner 1</td></tr>
+        <tr><td>Summoner 2</td></tr>
     </table>
 </div>
 
