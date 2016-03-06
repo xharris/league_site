@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
     <script src="https://maps.googleapis.com/maps/api/js"></script>
 
-
     <?php require_once "load.php"; ?>
 
     <table border="1" style="width:100%" id="main">
@@ -48,33 +47,27 @@
                 <p>Location</p>
                 <table id="loc">
                     <tr>
-                        <td><a href="#" id="c">Country</a></td>
-                        <td><a href="#">State</a></td>
-                        <td><a href="#">County</a></td>
+                        <td><a href="#" id="country">Country</a></td>
+                        <td><a href="#" id="state">State</a></td>
+                        <td><a href="#" id="county">County</a></td>
                     </tr>
-                    <tr>
-                        <td class="c">US</td>
-                        <td class="s">States</td>
-                        <td class="cy">County</td>
-                    </tr>
-                    <tr>
-                        <td class="c">Canada</td>
-                    </tr>
-                    <tr>
-                        <td class="c">South America</td>
-                    </tr>
-                    <tr>
-                        <td class="c">Europe</td>
-                    </tr>
-                    <tr>
-                        <td class="c">Africa</td>
-                    </tr>
-                    <tr>
-                        <td class="c">Asia</td>
-                    </tr>
-                    <tr>
-                        <td class="c">Australia</td>
-                    </tr>
+                    <form id="EnterCountry">
+                    <tr><input type="text" list="CountryList"></tr>
+                    </form>
+<td class="country">
+
+                    <?php
+                        $states = ['ALABAMA','ALASKA','ARIZONA','ARKANSAS','CALIFORNIA','COLORADO','CONNECTICUT','DELAWARE','DISTRICT OF COLUMBIA','FEDERATED STATES OF MICRONESIA','FLORIDA','GEORGIA','HAWAII','IDAHO','ILLINOIS','INDIANA','IOWA','KANSAS','KENTUCKY','LOUISIANA','MAINE','MARYLAND','MASSACHUSETTS','MICHIGAN','MINNESOTA','MISSISSIPPI','MISSOURI','MONTANA','NEBRASKA','NEVADA','NEW HAMPSHIRE','NEW JERSEY','NEW MEXICO','NEW YORK','NORTH CAROLINA','NORTH DAKOTA','OHIO','OKLAHOMA','OREGON','PENNSYLVANIA','PUERTO RICO','RHODE ISLAND','SOUTH CAROLINA','SOUTH DAKOTA','TENNESSEE','TEXAS','UTAH','VERMONT','VIRGIN ISLANDS','VIRGINIA','WASHINGTON','WEST VIRGINIA','WISCONSIN','WYOMING',];
+                        $cc = count($states);
+                        for($i = 0 ; $i < $cc ; $i++){
+                            /*echo '<tr><td class="state" colspan="3"> array_values($states['.$i.'])</td></tr>';*/
+                            echo '<tr><td class="state" colspan="3">'.$states[$i].'</td></tr>';
+                        }
+                        
+                        ?>
+
+                    <tr><td class="county" colspan="3">County</td></tr>
+
                 </table>
             </td>
             <td id = "map">
@@ -134,18 +127,30 @@
         return false;
     });
 
-    $("#c").on("click", function()
+    $("#Countrylist").keypress(function(event)
     {
-        $(".s").toggleClass("hidden");
-        $(".cy").toggleClass("hidden");
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            $(".state").hide();
+            $(".county").hide();
+            $(".country").show();
+        }
     });
 
-    $("Country").on("click", function()
+    $("#USA").on("click", function()
     {
-        $("s").toggleClass("hidden");
-        $("cy").toggleClass("hidden");
+        $(".county").hide();
+        $(".country").hide();
+        $(".state").show();
     });
 
+    $("#county").on("click", function()
+    {
+        $(".state").hide();
+        $(".country").hide();
+        $(".county").show();
+    });
+                    
     // Get the user's location
   if(navigator.geolocation) {
     browserSupportFlag = true;
@@ -184,5 +189,9 @@
     map.setCenter(initialLocation);
   }
 </script>
+
+<datalist id="CountryList">
+    <option value="United States"><option value="Canada"><option value="South America"><option value="Europe">
+    <option value="Africa"><<option value="Asia"><option value="Australia"></datalist>
 
 </html>

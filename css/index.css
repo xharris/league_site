@@ -19,6 +19,9 @@ table#main
 .hidden{
     display:none;
 }
+.expand {
+    colspan:2;
+}
 table#loc
 {
     border-collapse: collapse;
