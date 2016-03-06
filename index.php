@@ -114,7 +114,7 @@
             if (status == google.maps.GeocoderStatus.OK) {
               if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
                 var infowindow = new google.maps.InfoWindow(
-                    { content: '<b>'+city+'</b>',
+                    { content: '<b>'+cities[city]+'</b>',
                       size: new google.maps.Size(150,50)
                     });
 
