@@ -5,7 +5,7 @@
     <!-- CSS and SCRIPT includes -->
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
     <script src="https://maps.googleapis.com/maps/api/js"></script>
 
 
@@ -18,8 +18,9 @@
         </tr>
         <tr>
             <td id="nav">
+                <button id="btn_new_user">Add me!</button>
 
-                <div class="container_new_user">
+                <div class="container_new_user hidden">
                     <form id="form_new_user">
                         Summoner Name: <input type="text" name="summoner_name" id="summoner_name">
                         <br>
@@ -28,7 +29,17 @@
                         <button id="summoner_submit">SUBMIT</button>
                     </form>
                 </div>
-                <div id="loc">
+
+                <div class="container_user_list">
+                    <?php
+
+                    $users = $DB->getUserLocations();
+                    var_dump($users);
+
+                     ?>
+                </div>
+
+                <div id="loc"></div>
                 <p>Location</p>
                 <table id="loc">
                     <tr>
@@ -68,18 +79,19 @@
         <tr id="footer">
             <td colspan="2">
                 <p id="footer">site design / logo &#169; 2016, Made by Summoners like you Thank You.</p>
-                <div class="container_user_list hidden">
-                </div>
             </td>
         </tr>
     </table>
 
 <script>
-    var mapCanvas, mapOptions, map, user_name;
+    var mapCanvas, mapOptions, map, geocoder;
+    var user_name, addr_suggest;
+
     $(function(){
         mapCanvas = document.getElementById("map");
         mapOptions = {center: new google.maps.LatLng(38.8, -79.5), zoom: 4};
         map = new google.maps.Map(mapCanvas, mapOptions);
+        geocoder = new google.maps.Geocoder;
     });
 
     // prevent page reload
@@ -87,7 +99,12 @@
         e.preventDefault();
     });
 
-    // a new user wants to join
+    // show new user form
+    $("#btn_new_user").on("click",function(){
+        $(".container_new_user").toggleClass("hidden");
+    });
+
+    // new user form submit
     $("#summoner_submit").on( "click", function() {
 
         $.ajax({
@@ -100,10 +117,8 @@
             success: function (response) {
                 // set up
                 user_name = response;
-                $(".container_user_list > .summoner_name").html(user_name);
 
                 $(".container_new_user").toggleClass("hidden");
-                $(".container_user_list").toggleClass("hidden");
             }
         });
 
@@ -123,7 +138,11 @@
       map.setCenter(initialLocation);
       map.setZoom(15);
 
-      console.log(initialLocation)
+      geocoder.geocode({'location': initialLocation}, function(results, status) {
+          // suggest it to them (lol)
+          addr_suggest = results[2].formatted_address;
+          $("#location").val(addr_suggest);
+      });
 
     }, function() {
       handleNoGeolocation(browserSupportFlag);
