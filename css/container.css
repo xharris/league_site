@@ -41,6 +41,8 @@
     background-color: #f9fbe7;
     border:1px solid #e6ee9c;
     padding:5px;
+
+    transition: ease-in-out all 0.2s;
 }
 #nav > .container_user_list > .user_list > div:hover{
     position:relative;
