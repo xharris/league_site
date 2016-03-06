@@ -7,6 +7,10 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/container_user_list.css">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
 
 
@@ -37,17 +41,7 @@
                 </div>
 
                 <div class="container_user_list">
-                    <?php
 
-                    $user_list = $DB->getUserLocations();
-
-                    if (sizeof($user_list)) {
-                        foreach ($user_list as $u => $user) {
-                            echo $user['summoner_name'].'<br>';
-                        }
-                    }
-
-                     ?>
                 </div>
 
                 <div id="loc"></div>
@@ -84,7 +78,7 @@
 <script>
     var mapCanvas, mapOptions, map, geocoder;
     var user_info, addr_suggest, long, lat;
-    var cities;
+    var cities, users;
     var markers = [];
 
     $(function(){
@@ -100,6 +94,7 @@
   var marker, i;
 
   refreshMapMarkers();
+  refreshUserList();
 
       // Get the user's location
     if(navigator.geolocation) {
@@ -132,23 +127,54 @@
     });
 
     function refreshMapMarkers() {
-        cities = <?php echo $cities; ?>;
+        $.ajax({
+            url:"php/getCities.php",
+            success: function (response) {
+                // set up
+                if (response != '') {
+                    cities = JSON.parse(response);
 
-        for(var m in markers){
-            markers[m].setMap(null);
-            markers[m].pop();
-        }
+                    for(var m in markers){
+                        markers[m].setMap(null);
+                    }
 
-        for (i = 0; i < cities.length; i++) {
-            addMarker(cities[i][0], cities[i][1], map)
-          }
+                    for (i = 0; i < cities.length; i++) {
+                        addMarker(cities[i].name, cities[i].population, map)
+                    }
+                }
+            }
+        });
+    }
 
-         console.log(markers)
+    function refreshUserList() {
+        $.ajax({
+            url:"php/getUsers.php",
+            success: function (response) {
+                // set up
+                if (response != '') {
+                    users = JSON.parse(response);
+
+                    $(".container_user_list").empty();
+
+                    for(var u in users){
+                        console.log(users[u]);
+                        $(".container_user_list").append("\
+                            "+users[u].summoner_name+"<br>\
+                        ");
+                    }
+                }
+            }
+        });
+    }
+
+    function calcDistance(aLat,aLng,bLat,bLng){
+
     }
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
       geocoder.geocode({'address': location}, function(results, status) {
+
           var coords = {
               lat:results[0].geometry.location.lat(),
               lng:results[0].geometry.location.lng()
@@ -201,6 +227,7 @@
                     $(".container_new_user").toggleClass("hidden");
 
                     refreshMapMarkers();
+                    refreshUserList();
                 }
             }
         });
