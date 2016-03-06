@@ -5,7 +5,7 @@
     <!-- CSS and SCRIPT includes -->
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
     <script src="https://maps.googleapis.com/maps/api/js"></script>
 
 
