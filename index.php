@@ -11,7 +11,7 @@
 
     <?php require_once "load.php"; ?>
 
-    <table border="1" style="width:100%">
+    <table border="1" style="width:100%" id="main">
 
         <tr>
             <th colspan="2">LoL Location</th>
@@ -27,13 +27,40 @@
                         <button id="summoner_submit">SUBMIT</button>
                     </form>
                 </div>
+                <div id="loc">
                 <p>Location</p>
-                <ul class="breadcrumb">
-                <li>Home</li>
-                <li>Here</li>
-                </ul>
+                <table id="loc">
+                    <tr>
+                        <td><a href="#">Country</a></td>
+                        <td><a href="#">State</a></td>
+                        <td><a href="#">County</a></td>
+                    </tr>
+                    <tr>
+                        <td id="c">US</td>
+                        <td id="s">States</td>
+                        <td id="cy">County</td>
+                    </tr>
+                    <tr>
+                        <td id="c">Canada</td>
+                    </tr>
+                    <tr>
+                        <td id="c">South America</td>
+                    </tr>
+                    <tr>
+                        <td id="c">Europe</td>
+                    </tr>
+                    <tr>
+                        <td id="c">Africa</td>
+                    </tr>
+                    <tr>
+                        <td id="c">Asia</td>
+                    </tr>
+                    <tr>
+                        <td id="c">Australia</td>
+                    </tr>
+                </table>
             </td>
-            <td>
+            <td id = "map">
                 <div id="map" style="width:100%;height:100%">Map goes here</div>
             </td>
         </tr>

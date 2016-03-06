@@ -5,9 +5,9 @@ html
 table,tr, th, td
 {
     background-color: white;
-    border: 1px solid black;
+    border: 2px solid black;
 }
-table
+table#main
 {
     position: absolute;
     top: 0; bottom: 0; left:0; right: 0;
@@ -15,6 +15,10 @@ table
     border-collapse: collapse;
     width: 100%;
     height: 100%;
+}
+table#loc
+{
+    border-collapse: collapse;
 }
 th
 {
@@ -30,39 +34,17 @@ td
     text-align: top;
     background-color: #f1f1c1;
 }
+#map
+{
+    align: absolute;
+}
 #footer
 {
     margin: 0;
     padding: 0 0 0 0;
     font-size: 10px;
 }
-.breadcrumb
+td#c
 {
-    list-style: none;
-    overflow:hidden;
-}
-.breadcrumb li align
-{
-    color: white;
-    text-decoration: none;
-    padding: 10px 0 10px 65px;
-    background: brown;
-    background: hsla(34,85%,35%,1);
-    position: relative;
-    display: block;
-    float: left;
-}
-.breadcrumb li a:after {
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 50px solid transparent;
-    border-bottom: 50px solid transparent;
-    border-left: 30px solid hsla(34,85%,35%,1);
-    position: absolute;
-    top: 50%;
-    margin-top: -50px;
-    left: 100%;
-    z-index: 2; 
+    display: none;
 }
