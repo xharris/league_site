@@ -6,7 +6,15 @@
     colspan:2;
 }
 
+.container_new_user
+{
+    background-color: rgba(189,189,189,0.7) !important;
 
+}
+form#form_new_user
+{
+    text: rgba(0, 0, 0, 1);
+}
 html
 {
     background-color: #c5cae9;
@@ -29,6 +37,11 @@ table#loc
 {
     border-collapse: collapse;
 }
+table#SummonerFinder
+{
+    width: 90%;
+    border-collapse: collapse;
+}
 th
 {
     height: auto;
@@ -42,7 +55,7 @@ input#autocomplete
 {
     width: 90%;
 }
-#nav
+td#nav
 {
     width:20%;
     text-align: top;
@@ -61,8 +74,4 @@ input#autocomplete
 td#c, input#street_number, input#route, input#postal_code
 {
     display: none;
-}
-.field
-{
-    width: justify;
 }
