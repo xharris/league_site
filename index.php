@@ -123,9 +123,11 @@
             },
             success: function (response) {
                 // set up
-                user_name = response;
+                if (response != '') {
+                    user_name = response;
 
-                $(".container_new_user").toggleClass("hidden");
+                    $(".container_new_user").toggleClass("hidden");
+                }
             }
         });
 
