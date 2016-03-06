@@ -110,11 +110,11 @@
         return false;
     });
 
-    $("Country").on("click", function())
+    $("Country").on("click", function()
     {
         $("s").toggleClass("hidden");
         $("cy").toggleClass("hidden");
-    }
+    });
     // Get the user's location
   if(navigator.geolocation) {
     browserSupportFlag = true;
