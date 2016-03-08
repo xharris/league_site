@@ -254,35 +254,28 @@
 
 
     function refreshUserList() {
-        $.ajax({
-            url:"php/getUsers.php",
-            success: function (response, users) {
+        getUserList(function(users){
 
-                // set up
-                if (response != '') {
-                    users = JSON.parse(response);
+            $(".container_user_list > .user_list").empty();
 
-                    $(".container_user_list > .user_list").empty();
+            for(var u in users){
+                user_getLevel(users[u], function(user, level){
 
-                    for(var u in users){
-                        user_getLevel(users[u], function(user, level){
-
-                            is_me = '';
-                            /*
-                            if (user.summoner_name == getCookie("user")) {
-                                is_me = ' class="current_user" ';
-                            }
-                            */
-
-                            $(".container_user_list > .user_list").append("\
-                              <div"+is_me+">"+user.summoner_name+" ("+level+")<a href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
-                            ");
-
-                        });
-
+                    is_me = '';
+                    /*
+                    if (user.summoner_name == getCookie("user")) {
+                        is_me = ' class="current_user" ';
                     }
-                }
+                    */
+
+                    $(".container_user_list > .user_list").append("\
+                      <div"+is_me+">"+user.summoner_name+" ("+level+")<a href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
+                    ");
+
+                });
+
             }
+
         });
     }
 
@@ -290,6 +283,7 @@
         $.ajax({
             url:"php/getUsers.php",
             success: function (response) {
+                users = JSON.parse(response);
                 callback(JSON.parse(response));
             }
         });
@@ -299,6 +293,7 @@
         $.ajax({
             url:"php/getCities.php",
             success: function (response) {
+                cities = JSON.parse(response);
                 callback(JSON.parse(response));
             }
         });
@@ -317,7 +312,6 @@
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
-        console.log (location);
           geocoder.geocode({'address': location}, function(results, status) {
 
               var coords = {
@@ -328,12 +322,14 @@
               var info_text = location;
               var user_string = '';
               var user_count = 0;
+
               for (var u in users) {
                   if (users[u].location == location) {
                       user_count += 1;
                       user_string += users[u].summoner_name+"<br>";
                   }
               }
+
               user_string = user_string.substring(0, user_string.length - 4);
               info_text += "<br><b>"+user_count+" players</b><div style='max-height:80px;overflow:auto'>"+user_string+"</div>";
 
