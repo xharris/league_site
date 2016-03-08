@@ -51,7 +51,7 @@
     border:1px solid #e6ee9c;
     padding:5px;
 }
-#nav > .container_user_list > .user_list > div > a{
+#nav > .container_user_list > .user_list > div > .icon_location{
     position: absolute;
     right: 8px;
     font-size: 23px;

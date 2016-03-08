@@ -269,7 +269,7 @@
                     */
 
                     $(".container_user_list > .user_list").append("\
-                      <div"+is_me+">"+user.summoner_name+" ("+level+")<a href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
+                      <div"+is_me+"><a href='http://na.op.gg/summoner/userName="+user.summoner_name+"'>"+user.summoner_name+"</a> ("+level+")<a class='icon_location' href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
                     ");
 
                 });
@@ -326,7 +326,7 @@
               for (var u in users) {
                   if (users[u].location == location) {
                       user_count += 1;
-                      user_string += users[u].summoner_name+"<br>";
+                      user_string += "<a style='color:#e64a19;' href='http://na.op.gg/summoner/userName="+users[u].summoner_name+"'>"+users[u].summoner_name+"</a><br>";
                   }
               }
 
