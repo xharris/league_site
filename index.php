@@ -10,11 +10,14 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.blue_grey-orange.min.css" />
-    <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+    <script src="https://code.getmdl.io/1.1.2/material.min.js"></script>
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <script src="config.js"></script>
+    <script src="js/riotapi.js"></script>
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
@@ -153,7 +156,6 @@
     var cities, users;
     var markers = [];
 
-    var API_KEY = '800eb4db-8f56-48ee-8f7f-aefefeca5769';
 
     $(function(){
         mapCanvas = document.getElementById("map");
@@ -161,21 +163,26 @@
         geocoder = new google.maps.Geocoder;
 
         var infowindow, marker;
-
-  var marker, i;
+        var marker, i;
 
   refreshMapMarkers();
   refreshUserList();
 
   var found = false;
-  for (var u in users) {
-      if (getCooke("users") && users[u].name == getCookie("users")) {
-          var user_loc = new google.maps.LatLng(users[u].latitude,users[u].longitude);
-          map.setCenter(user_loc);
-          map.setZoom(15);
-          found = true;
+
+  getUserList(function(users){
+      for (var u in users) {
+          if (getCookie("users") && users[u].name == getCookie("users")) {
+              var user_loc = new google.maps.LatLng(users[u].latitude,users[u].longitude);
+              map.setCenter(user_loc);
+              map.setZoom(15);
+              found = true;
+          }
+          var user = users[u];
       }
-  }
+
+  });
+
 
       // Get the user's location
     if(navigator.geolocation) {
@@ -231,20 +238,14 @@
     }
 
     function refreshMapMarkers() {
-        $.ajax({
-            url:"php/getCities.php",
-            success: function (response) {
-                // set up
-                if (response != '') {
-                    cities = JSON.parse(response);
+        getCityList(function (cities) {
+            for(var m in markers){
+                markers[m].setMap(null);
+            }
 
-                    for(var m in markers){
-                        markers[m].setMap(null);
-                    }
-
-                    for (i = 0; i < cities.length; i++) {
-                        addMarker(cities[i].name, cities[i].population, map)
-                    }
+            for (i = 0; i < cities.length; i++) {
+                if (cities[i].population != 0) {
+                    addMarker(cities[i].name, cities[i].population, map);
                 }
             }
         });
@@ -255,7 +256,8 @@
     function refreshUserList() {
         $.ajax({
             url:"php/getUsers.php",
-            success: function (response) {
+            success: function (response, users) {
+
                 // set up
                 if (response != '') {
                     users = JSON.parse(response);
@@ -263,25 +265,44 @@
                     $(".container_user_list > .user_list").empty();
 
                     for(var u in users){
-                        getLevel(users[u], function(user,user_level){
+                        user_getLevel(users[u], function(user, level){
 
                             is_me = '';
+                            /*
                             if (user.summoner_name == getCookie("user")) {
                                 is_me = ' class="current_user" ';
                             }
+                            */
 
                             $(".container_user_list > .user_list").append("\
-                              <div"+is_me+">"+user.summoner_name+" ("+user_level+")<a href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
+                              <div"+is_me+">"+user.summoner_name+" ("+level+")<a href='#' onclick='moveMap(\""+user.location+"\")'><i class='fa fa-map-marker'></i></a></div>\
                             ");
+
                         });
 
                     }
-                    //getStuff("Toaxt", function(summ_name,user_level){})
                 }
             }
         });
     }
 
+    function getUserList(callback) {
+        $.ajax({
+            url:"php/getUsers.php",
+            success: function (response) {
+                callback(JSON.parse(response));
+            }
+        });
+    }
+
+    function getCityList(callback) {
+        $.ajax({
+            url:"php/getCities.php",
+            success: function (response) {
+                callback(JSON.parse(response));
+            }
+        });
+    }
 
     function calcDistance(aLat,aLng,bLat,bLng){
 
@@ -296,87 +317,53 @@
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
-      geocoder.geocode({'address': location}, function(results, status) {
+        console.log (location);
+          geocoder.geocode({'address': location}, function(results, status) {
 
-          var coords = {
-              lat:results[0].geometry.location.lat(),
-              lng:results[0].geometry.location.lng()
-          };
+              var coords = {
+                  lat:results[0].geometry.location.lat(),
+                  lng:results[0].geometry.location.lng()
+              };
 
-          var info_text = location;
-          var user_string = '';
-          var user_count = 0;
-          for (var u in users) {
-              if (users[u].location == location) {
-                  user_count += 1;
-                  user_string += users[u].summoner_name+"<br>";
+              var info_text = location;
+              var user_string = '';
+              var user_count = 0;
+              for (var u in users) {
+                  if (users[u].location == location) {
+                      user_count += 1;
+                      user_string += users[u].summoner_name+"<br>";
+                  }
               }
-          }
-          user_string = user_string.substring(0, user_string.length - 4);
-          info_text += "<br><b>"+user_count+" players</b><div style='max-height:80px;overflow:auto'>"+user_string+"</div>";
+              user_string = user_string.substring(0, user_string.length - 4);
+              info_text += "<br><b>"+user_count+" players</b><div style='max-height:80px;overflow:auto'>"+user_string+"</div>";
 
-          marker = new google.maps.Marker({
-            position: coords,
-            label: label,
-            map: map,
-            infowindow: new google.maps.InfoWindow({
-                            content: info_text
-                        })
-          });
+              marker = new google.maps.Marker({
+                position: coords,
+                label: label,
+                map: map,
+                infowindow: new google.maps.InfoWindow({
+                                content: info_text
+                            })
+              });
 
-          markers.push(marker);
+              markers.push(marker);
 
-        google.maps.event.addListener(marker, 'click', function() {
-          this.infowindow.open(map, this);
+            google.maps.event.addListener(marker, 'click', function() {
+              this.infowindow.open(map, this);
+            });
         });
-     });
+
     }
 
-    function getLevel(user,callback){
-        call = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + user.summoner_name + '?api_key='+API_KEY
-
-
+    function user_getLevel(user,callback){
         $.ajax({
-            url: call,
-            type: 'GET',
-            dataType: 'json',
+            type: 'post',
+            url: 'php/getUserLevel.php',
             data: {
-
+                name: user.summoner_name
             },
-            success: function (json) {
-                var SUMMONER_NAME_NOSPACES = user.summoner_name.replace(" ", "");
-
-                SUMMONER_NAME_NOSPACES = SUMMONER_NAME_NOSPACES.toLowerCase().trim();
-
-                summonerLevel = json[SUMMONER_NAME_NOSPACES].summonerLevel;
-                summonerID = json[SUMMONER_NAME_NOSPACES].id;
-
-                callback(user,summonerLevel);
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("error getting Summoner data!");
-            }
-        });
-    }
-
-    function getStuff(username,callback){
-        call = 'https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/' + username + '/ranked?api_key='+API_KEY
-
-
-        $.ajax({
-            url: call,
-            type: 'GET',
-            dataType: 'json',
-            data: {
-
-            },
-            success: function (json) {
-                console.log(json);
-
-                //callback(username,summonerLevel);
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                //alert("error getting Summoner data!");
+            success: function (response) {
+                callback(user,response);
             }
         });
     }
@@ -399,7 +386,8 @@
             longitude: long,
             latitude: lat
         };
-        getLevel(vals, function(user,user_level){
+
+        riotAPI.getUserLevel(vals, function(user,user_level){
             $.ajax({
                 type: 'post',
                 url: 'new_user.php',
@@ -407,7 +395,8 @@
                     summoner_name: $("#summoner_name").val(),
                     location: $("#location").val(),
                     longitude: long,
-                    latitude: lat
+                    latitude: lat,
+                    level: user_level
                 },
                 success: function (response) {
                     // set up
@@ -418,6 +407,16 @@
 
                         refreshUserList();
                         refreshMapMarkers();
+
+                        // reset form inputs
+                        $("#summoner_name").val("");
+                        $("#location").val(addr_suggest);
+
+                        geocoder.geocode({'address': addr_suggest}, function(results, status) {
+                            initialLocation = new google.maps.LatLng(results[0].geometry.location.lat(),results[0].geometry.location.lng());
+                            map.setCenter(initialLocation);
+                            map.setZoom(9);
+                        });
                     }
                 }
             });

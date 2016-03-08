@@ -12,9 +12,8 @@
             $_POST['latitude']
         );
 
-        setcookie("user",$name);
 
-        $cities = $DB->getCitiesJS();
+        $DB->update_summoner_level($name,$_POST['level']);
 
         echo '["'.$_POST['summoner_name'].'","'.$_POST['location'].'"]';
     }
