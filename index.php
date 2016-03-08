@@ -312,8 +312,8 @@
 
     // Adds a marker to the map.
     function addMarker(location, label, map) {
+        console.log(location);
           geocoder.geocode({'address': location}, function(results, status) {
-
               var coords = {
                   lat:results[0].geometry.location.lat(),
                   lng:results[0].geometry.location.lng()

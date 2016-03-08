@@ -26,16 +26,18 @@ class Database {
         return $this->conn->multi_query($query);
     }
 
-    function add_summoner($name,$location,$long,$lat){
+    function add_summoner($name,$location,$long,$lat,$level){
         $sql = "
             INSERT INTO users (summoner_name,location,longitude,latitude)
             VALUES ('".$name."','".$location."','".$long."','".$lat."');
 
-            UPDATE cities SET population = population + 1
-            WHERE name = '".$location."';
-
             INSERT INTO cities (name,population)
-            VALUES ('".$location."','1');
+            VALUES ('".$location."','1')
+            ON DUPLICATE KEY UPDATE population = population + 1;
+
+            INSERT INTO user_level (summoner_name,level)
+            VALUES ('".$name."',".$level.")
+            ON DUPLICATE KEY UPDATE level=".$level.";
         ";
         $this->multi_query($sql);
     }
@@ -46,7 +48,7 @@ class Database {
             VALUES ('".$name."',".$level.")
             ON DUPLICATE KEY UPDATE level=".$level.";
         ";
-        $this->query($sql);
+        $this->multi_query($sql);
     }
 
     function getUsers(){

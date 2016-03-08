@@ -9,11 +9,10 @@
             $name,
             $_POST['location'],
             $_POST['longitude'],
-            $_POST['latitude']
+            $_POST['latitude'],
+            $_POST['level']
         );
 
-
-        $DB->update_summoner_level($name,$_POST['level']);
 
         echo '["'.$_POST['summoner_name'].'","'.$_POST['location'].'"]';
     }
